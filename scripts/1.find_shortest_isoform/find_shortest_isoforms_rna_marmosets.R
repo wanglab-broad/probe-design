@@ -1,4 +1,4 @@
-# Find shortest isoforms 
+# Find shortest isoforms for Marmosets files
 
 rm(list = ls(all.names = TRUE)) #will clear all objects includes hidden objects.
 # gc() #free up memrory and report the memory usage.
@@ -19,12 +19,13 @@ fa <- read.fasta(file_path, forceDNAtolower = FALSE)
 filtered_fa <- fa
 #filtered_fa <- fa[!grepl('X', names(fa))]
 
-seq = getSequence(filtered_fa)
-annot = getAnnot(filtered_fa)
+# Construct seqinr object
+seq <- getSequence(filtered_fa)
+annot <- getAnnot(filtered_fa)
 
 # Manipulate RNA matrix
 df <- data.frame(matrix(unlist(annot), nrow=length(filtered_fa), byrow=T),stringsAsFactors=FALSE)
-colnames(df) = 'old_header'
+colnames(df) <- 'old_header'
 df$old_header <- gsub('>', '', df$old_header)
 df$refseq <- sapply(strsplit(df$old_header, " "), function(v) {return(v[1])})
 
@@ -41,7 +42,8 @@ print(length(df[startsWith(df$gene_annot, "c\""), 'gene_annot'] ))
 a <- data.frame(sapply(strsplit(df[startsWith(df$gene_annot, "c\""), 'gene_annot'], '\\"'), function(x) {return(tail(x[!grepl(':| ', x)], n=1))}))
 
 df[startsWith(df$gene_annot, "c\""), 'gene_annot'] <- sapply(strsplit(df[startsWith(df$gene_annot, "c\""), 'gene_annot'], '\\"'), function(x) {return(tail(x[!grepl(':| ', x)], n=1))})
-# if there's multiple gene symbols brom the annotation, choose the last one 
+
+# if there's multiple gene symbols brom the annotation, choose the last one
 #df[startsWith(df$gene_annot, "c"), 'gene_annot'] <- sapply(strsplit(df[startsWith(df$gene_annot, "c"), 'gene_annot'], '\\"'), function(x) {return(tail(x, n=1))})
 
 # XM or NM
@@ -63,8 +65,6 @@ obj <- tapply(sorted_df$seq, 1:length(sorted_df$seq), s2c)
 # Writing output file
 current_date <- Sys.Date()
 current_date <- format(current_date, format="%m_%d_%y")
-
-
 output_name <- paste(species, '_rna_shortest_isoforms_', current_date, '.fa', sep = '')
 output_path <- paste('../../Data/Seq', species, 'output', output_name, sep = '/')
 write.fasta(obj , sorted_df$new_header, file=output_path)

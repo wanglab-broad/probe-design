@@ -1,4 +1,4 @@
-# Find shortest isoforms 
+# Find shortest isoforms with whole transcriptome input files
 
 rm(list = ls(all.names = TRUE)) #will clear all objects includes hidden objects.
 gc() #free up memrory and report the memory usage.
@@ -17,7 +17,7 @@ library(stringi)
 species <- 'R_norvegicus'
 
 # Loading input file
-file_name = "GCF_015227675.2_mRatBN7.2_rna.fna"
+file_name <- "GCF_015227675.2_mRatBN7.2_rna.fna"
 file_path <- paste('../../Data/Seq', species, file_name, sep = '/')
 fa <- read.fasta(file_path, forceDNAtolower = FALSE)
 
@@ -27,14 +27,15 @@ filtered_fa <- fa[!grepl('X', names(fa))]
 # Change filtered fa name 
 #names(filtered_fa) <-  sapply(strsplit(names(filtered_fa), "\\|"), function(v) {return(v[2])})
 
-seq = getSequence(filtered_fa)
-annot = getAnnot(filtered_fa)
+# Construct seqinr object
+seq <- getSequence(filtered_fa)
+annot <- getAnnot(filtered_fa)
 
 # Manipulate RNA matrix
 df <- data.frame(matrix(unlist(annot), nrow=length(filtered_fa), byrow=T),stringsAsFactors=FALSE)
-colnames(df) = 'old_header'
+colnames(df) <- 'old_header'
 df$refseq <- sapply(strsplit(df$old_header, "\\ "), function(v) {return(v[1])})
-df$refseq = gsub(">", "", df$refseq)
+df$refseq <- gsub(">", "", df$refseq)
 # df$refseq <- sapply(strsplit(df$old_header, "\\|"), function(v) {return(v[2])})
 df$refseq_quary <- gsub("\\..*", "", df$refseq)
 
@@ -51,6 +52,7 @@ if (species == 'H_sapiens') {
   db <- org.Rn.eg.db
 }
 
+# Use refseq id find gene symbol
 temp <- select(db, 
        keys = df$refseq_quary,
        columns = c("SYMBOL", "REFSEQ"),
@@ -62,9 +64,9 @@ df$gene_annot <- gsub("[\\(\\)]", "", regmatches(df$old_header, gregexpr("\\(.*?
 
 # if there's multiple gene symbols brom the annotation, choose the last one without : or space 
 print(length(df[startsWith(df$gene_annot, "c\""), 'gene_annot'] ))
-
 df[startsWith(df$gene_annot, "c\""), 'gene_annot'] <- sapply(strsplit(df[startsWith(df$gene_annot, "c\""), 'gene_annot'], '\\"'), function(x) {return(tail(x[!grepl(':| ', x)], n=1))})
-# if there's multiple gene symbols brom the annotation, choose the last one 
+
+# if there's multiple gene symbols brom the annotation, choose the last one
 #df[startsWith(df$gene_annot, "c"), 'gene_annot'] <- sapply(strsplit(df[startsWith(df$gene_annot, "c"), 'gene_annot'], '\\"'), function(x) {return(tail(x, n=1))})
 
 # debug
@@ -84,7 +86,7 @@ df$new_header <- paste(df$refseq, df$gene_annot, sep = '|')
 
 # Sort the df by gene and seq length 
 sorted_df <- df[order(df$gene_annot, df$refseq_prefix, df$seq_length), ]
-sorted_df <- sorted_df[!duplicated(sorted_df[,c('gene_annot')]),]
+sorted_df <- sorted_df[!duplicated(sorted_df[, c('gene_annot')]),]
 
 # Extracting longest transcript for each gene
 # filtered_seq <- tapply(sequences, genes, function(v) {return(v[which(nchar(v)==min(nchar(v)))])})
@@ -95,8 +97,6 @@ obj <- tapply(sorted_df$seq, 1:length(sorted_df$seq), s2c)
 # Writing output file
 current_date <- Sys.Date()
 current_date <- format(current_date, format="%m_%d_%y")
-
-
 output_name <- paste(species, '_rna_shortest_isoforms_', current_date, '.fa', sep = '')
 output_path <- paste('../../Data/Seq', species, 'output', output_name, sep = '/')
 write.fasta(obj , sorted_df$new_header, file=output_path)
