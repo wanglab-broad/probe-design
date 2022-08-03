@@ -6,7 +6,7 @@ import os
 import time
 import numpy as np
 import pandas as pd
-import melting
+import melting # https://github.com/eclarke/melt
 import multiprocessing as mp
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord

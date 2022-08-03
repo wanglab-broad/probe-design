@@ -1,0 +1,3 @@
+qsub -pe smp 4 -binding linear:4 -l h_vmem=2G -l h_rt=10:00:00 /stanley/WangLab/Documents/probe/Human_Intron_Probe/code/run_parsing.sh
+
+qsub -pe smp 4 -binding linear:4 -l h_vmem=3G -l h_rt=15:00:00 /stanley/WangLab/Documents/probe/Mouse_Intron_Probe/code/run_parsing.sh
