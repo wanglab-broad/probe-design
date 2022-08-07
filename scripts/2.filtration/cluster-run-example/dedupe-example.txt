@@ -1,0 +1,2 @@
+dedupe.sh in=./parsed_probes.fa out=out.fa outd=dup.fa s=1 k=20 sort=id
+dedupe.sh in=./parsed_probes.fa pattern=clust/cluster_%.fa fo c pto pc cc s=1 k=20 mo=20 mcs=2

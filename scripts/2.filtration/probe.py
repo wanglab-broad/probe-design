@@ -4,6 +4,7 @@
 # libraries
 import os
 import time
+import itertools
 import numpy as np
 import pandas as pd
 import melting # https://github.com/eclarke/melt
@@ -163,3 +164,42 @@ def parse_picky_new(fname, source_index):
 def make_seq_record(seq, name):
     seq_record = SeqRecord(Seq(seq), id=name, description='', letter_annotations={"phred_quality": [40] * len(seq)})
     return seq_record
+
+
+# Parse dedupe cluster results
+def parse_cluster(file_name):
+    file = open(file_name, 'r')
+
+    min = None
+    index_list = []
+    for l in file:
+        if l.startswith('>'):
+            fields = l.rstrip().split("_")
+            current_index = int(fields[-1])
+            index_list.append(current_index)
+            if not min:
+                min = current_index
+            else:
+                min = current_index if current_index < min else min
+        else:
+            pass
+
+    min_index = index_list.index(min)
+    index_list.pop(min_index)
+    return index_list
+
+
+# Parse dedupe dup results
+def parse_dup(file_name):
+    file = open(file_name, 'r')
+
+    index_list = []
+    for l in file:
+        if l.startswith('>'):
+            fields = l.rstrip().split("_")
+            current_index = int(fields[-1])
+            index_list.append(current_index)
+        else:
+            pass
+
+    return index_list
