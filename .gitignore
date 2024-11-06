@@ -43,3 +43,5 @@ vignettes/*.pdf
 *.pyc
 .idea
 .ipynb_checkpoints
+.vscode/settings.json
+/scripts/2.filtration/__MACOSX
