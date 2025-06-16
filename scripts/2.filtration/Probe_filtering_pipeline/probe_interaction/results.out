@@ -1,0 +1,120 @@
+BLASTN 2.16.0+
+
+
+Reference: Stephen F. Altschul, Thomas L. Madden, Alejandro A.
+Schaffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J.
+Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of
+protein database search programs", Nucleic Acids Res. 25:3389-3402.
+
+
+
+Database: Example_db.fasta
+           12 sequences; 528 total letters
+
+
+
+Query= Cd8a_pri_2
+
+Length=39
+                                                                      Score     E
+Sequences producing significant alignments:                          (Bits)  Value
+
+Cd8a_pad_3                                                            30.2    1e-05
+
+
+>Cd8a_pad_3
+Length=53
+
+ Score = 30.2 bits (15),  Expect = 1e-05
+ Identities = 18/19 (95%), Gaps = 0/19 (0%)
+ Strand=Plus/Minus
+
+Query  15  GAAAATGGAGGCCTATTTT  33
+           ||||||||| |||||||||
+Sbjct  19  GAAAATGGACGCCTATTTT  1
+
+
+
+Lambda      K        H
+    1.37    0.711     1.31 
+
+Gapped
+Lambda      K        H
+    1.37    0.711     1.31 
+
+Effective search space used: 14208
+
+
+Query= test1
+
+Length=30
+                                                                      Score     E
+Sequences producing significant alignments:                          (Bits)  Value
+
+Cd8a_pad_3                                                            18.3    0.033
+
+
+>Cd8a_pad_3
+Length=53
+
+ Score = 18.3 bits (9),  Expect = 0.033
+ Identities = 9/9 (100%), Gaps = 0/9 (0%)
+ Strand=Plus/Minus
+
+Query  16  GCCTATTTT  24
+           |||||||||
+Sbjct  9   GCCTATTTT  1
+
+
+
+Lambda      K        H
+    1.37    0.711     1.31 
+
+Gapped
+Lambda      K        H
+    1.37    0.711     1.31 
+
+Effective search space used: 10944
+
+
+Query= test1
+
+Length=31
+                                                                      Score     E
+Sequences producing significant alignments:                          (Bits)  Value
+
+Cd8a_pad_3                                                            20.3    0.009
+
+
+>Cd8a_pad_3
+Length=53
+
+ Score = 20.3 bits (10),  Expect = 0.009
+ Identities = 10/10 (100%), Gaps = 0/10 (0%)
+ Strand=Plus/Minus
+
+Query  16  CGCCTATTTT  25
+           ||||||||||
+Sbjct  10  CGCCTATTTT  1
+
+
+
+Lambda      K        H
+    1.37    0.711     1.31 
+
+Gapped
+Lambda      K        H
+    1.37    0.711     1.31 
+
+Effective search space used: 11400
+
+
+  Database: Example_db.fasta
+    Posted date:  Oct 23, 2024  11:49 AM
+  Number of letters in database: 528
+  Number of sequences in database:  12
+
+
+
+Matrix: blastn matrix 1 -3
+Gap Penalties: Existence: 5, Extension: 2
